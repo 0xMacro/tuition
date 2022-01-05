@@ -4,9 +4,9 @@ const { ethers } = require("hardhat");
 
 describe("Tuition contract", function () {
   beforeEach(async () => {
-    [addr1, owner, addr2, ...addrs] = await ethers.getSigners();
+    [addr1, owner, addr2, treasury, ...addrs] = await ethers.getSigners();
     const Tuition = await ethers.getContractFactory("Tuition");
-    tuition = await Tuition.deploy(owner.address);
+    tuition = await Tuition.deploy(owner.address, treasury.address);
   });
 
   describe("Deployment", () => {
@@ -129,7 +129,49 @@ describe("Tuition contract", function () {
     it("Moves a student funds to treasury", async () => {
       await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
 
-      await tuition.moveStudentFundsToTreasury(addr2.address);
+      await expect(() =>
+        tuition.moveStudentFundsToTreasury(addr2.address)
+      ).to.changeEtherBalances(
+        [tuition, treasury],
+        [parseEther("-4"), parseEther("4")]
+      );
+
+      expect(await tuition.amountPaidBy(addr2.address)).to.be.equal(0);
+      expect(await tuition.alreadyPaid(addr2.address)).to.be.false;
+    });
+
+    it("Moves all contract funds to treasury", async () => {
+      await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
+      await tuition
+        .connect(addrs[0])
+        .payFullTuition({ value: parseEther("4") });
+      await tuition
+        .connect(addrs[1])
+        .depositInsurance({ value: parseEther("1") });
+
+      await expect(
+        await tuition.connect(owner).moveAllFundsToTreasury()
+      ).to.changeEtherBalance(treasury, parseEther("9"));
+    });
+
+    it("Blocks fund movement once all funds have been transferred treasury", async () => {
+      await tuition.connect(owner).moveAllFundsToTreasury();
+
+      await expect(
+        tuition.connect(addr2).depositInsurance({ value: parseEther("1") })
+      ).to.be.revertedWith("NOT_TAKING_PAYMENTS");
+
+      await expect(
+        tuition.connect(addr2).payFullTuition({ value: parseEther("4") })
+      ).to.be.revertedWith("NOT_TAKING_PAYMENTS");
+
+      await expect(tuition.refundUser(addr2.address)).to.be.revertedWith(
+        "NOT_TAKING_PAYMENTS"
+      );
+
+      await expect(
+        tuition.moveStudentFundsToTreasury(addr2.address)
+      ).to.be.revertedWith("NOT_TAKING_PAYMENTS");
     });
   });
 
