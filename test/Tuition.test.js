@@ -175,5 +175,16 @@ describe("Tuition contract", function () {
     });
   });
 
-  describe("Adding/removing staff", () => {});
+  describe("Adding/removing staff", () => {
+    it("Adds staff", async () => {
+      await tuition.connect(owner).addStaff(addr2.address);
+      expect(await tuition.isStaff(addr2.address)).to.be.true;
+    });
+
+    it("Removes staff", async () => {
+      await tuition.connect(owner).addStaff(addr2.address);
+      await tuition.connect(owner).removeStaff(addr2.address);
+      expect(await tuition.isStaff(addr2.address)).to.be.false;
+    });
+  });
 });
