@@ -35,6 +35,26 @@ describe("Tuition contract", function () {
         "Ownable: caller is not the owner"
       );
     });
+
+    it("Only owner can move all funds to treasury", async () => {
+      await expect(tuition.moveAllFundsToTreasury()).to.be.revertedWith(
+        "Ownable: caller is not the owner"
+      );
+    });
+  });
+
+  describe("Staff only", () => {
+    it("Only staff can refund", async () => {
+      await expect(
+        tuition.connect(addr2).refundUser(addr1.address)
+      ).to.be.revertedWith("STAFF_ONLY");
+    });
+
+    it("Only staff can move student funds to treasury", async () => {
+      await expect(
+        tuition.connect(addr2).moveStudentFundsToTreasury(addr1.address)
+      ).to.be.revertedWith("STAFF_ONLY");
+    });
   });
 
   describe("Payments", () => {
@@ -89,9 +109,29 @@ describe("Tuition contract", function () {
     });
   });
 
-  describe("Staff only", () => {});
+  describe("Refunds", () => {
+    it("Refunds a student", async () => {
+      await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
 
-  describe("Refunds", () => {});
+      await expect(() =>
+        tuition.refundUser(addr2.address)
+      ).to.changeEtherBalances(
+        [tuition, addr2],
+        [parseEther("-4"), parseEther("4")]
+      );
 
-  describe("Moving to treasury", () => {});
+      expect(await tuition.amountPaidBy(addr2.address)).to.be.equal(0);
+      expect(await tuition.alreadyPaid(addr2.address)).to.be.false;
+    });
+  });
+
+  describe("Moving to treasury", () => {
+    it("Moves a student funds to treasury", async () => {
+      await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
+
+      await tuition.moveStudentFundsToTreasury(addr2.address);
+    });
+  });
+
+  describe("Adding/removing staff", () => {});
 });

@@ -25,6 +25,7 @@ contract Tuition is Ownable {
         require(msg.value == 1 ether, "DEPOSIT_COSTS_1_ETHER");
 
         alreadyPaid[msg.sender] = true;
+        amountPaidBy[msg.sender] = 1 ether;
     }
 
     function payFullTuition() public payable {
@@ -32,32 +33,26 @@ contract Tuition is Ownable {
         require(msg.value == 4 ether, "FULL_TUITION_COSTS_4_ETHER");
 
         alreadyPaid[msg.sender] = true;
+        amountPaidBy[msg.sender] = 4 ether;
     }
 
     function refundUser(address account) public onlyStaff {
-        require(alreadyPaid[account], "NOTHING_TO_REFUND");
+        require(alreadyPaid[account], "STUDENT_DIDNT_PAY");
         require(amountPaidBy[account] > 0, "NOTHING_TO_REFUND");
 
         uint256 amountToRefund = amountPaidBy[account];
         amountPaidBy[account] = 0;
-        alreadyPaid[msg.sender] = false;
+        alreadyPaid[account] = false;
 
         (bool success, ) = account.call{value: amountToRefund}("");
         require(success, "TRANSFER_FAILED");
     }
 
     function moveStudentFundsToTreasury(address student) public onlyStaff {
-        require(alreadyPaid[student], "NO_FUNDS_AVAILABLE");
+        require(alreadyPaid[student], "STUDENT_DIDNT_PAY");
         require(amountPaidBy[student] > 0, "NO_FUNDS_AVAILABLE");
 
         (bool success, ) = TREASURY.call{value: amountPaidBy[student]}("");
-        require(success, "TRANSFER_FAILED");
-    }
-
-    // In case of an emergency
-
-    function moveAllFundsToTreasury() public onlyOwner {
-        (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
     }
 
@@ -67,5 +62,12 @@ contract Tuition is Ownable {
 
     function removeStaff(address account) public onlyOwner {
         isStaff[account] = false;
+    }
+
+    // In case of an emergency
+
+    function moveAllFundsToTreasury() public onlyOwner {
+        (bool success, ) = TREASURY.call{value: address(this).balance}("");
+        require(success, "TRANSFER_FAILED");
     }
 }
