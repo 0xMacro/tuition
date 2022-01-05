@@ -21,15 +21,15 @@ contract Tuition is Ownable {
     }
 
     function depositInsurance() public payable {
-        require(msg.value == 1 ether, "DEPOSIT_COSTS_1_ETHER");
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
+        require(msg.value == 1 ether, "DEPOSIT_COSTS_1_ETHER");
 
         alreadyPaid[msg.sender] = true;
     }
 
     function payFullTuition() public payable {
-        require(msg.value == 4 ether, "FULL_TUITION_COSTS_4_ETHER");
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
+        require(msg.value == 4 ether, "FULL_TUITION_COSTS_4_ETHER");
 
         alreadyPaid[msg.sender] = true;
     }
@@ -51,6 +51,13 @@ contract Tuition is Ownable {
         require(amountPaidBy[student] > 0, "NO_FUNDS_AVAILABLE");
 
         (bool success, ) = TREASURY.call{value: amountPaidBy[student]}("");
+        require(success, "TRANSFER_FAILED");
+    }
+
+    // In case of an emergency
+
+    function moveAllFundsToTreasury() public onlyOwner {
+        (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
     }
 

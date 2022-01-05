@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const { parseEther } = require("ethers/lib/utils");
 const { ethers } = require("hardhat");
 
 describe("Tuition contract", function () {
@@ -36,9 +37,59 @@ describe("Tuition contract", function () {
     });
   });
 
-  describe("Staff only", () => {});
+  describe("Payments", () => {
+    describe("Deposits", () => {
+      it("Reverts if not exactly 1 ETH", async () => {
+        await expect(
+          tuition.connect(addr2).depositInsurance({ value: parseEther("1.1") })
+        ).to.be.revertedWith("DEPOSIT_COSTS_1_ETHER");
+      });
 
-  describe("Payments", () => {});
+      it("Student can deposit 1 ETH", async () => {
+        await tuition
+          .connect(addr2)
+          .depositInsurance({ value: parseEther("1") });
+
+        const studentPaid = await tuition.alreadyPaid(addr2.address);
+        expect(studentPaid).to.be.true;
+      });
+
+      it("Reverts if student already paid", async () => {
+        await tuition
+          .connect(addr2)
+          .depositInsurance({ value: parseEther("1") });
+
+        await expect(
+          tuition.connect(addr2).depositInsurance({ value: parseEther("1") })
+        ).to.be.revertedWith("ALREADY_PAID");
+      });
+    });
+
+    describe("Full tuition payment", () => {
+      it("Reverts if not exactly 4 ETH", async () => {
+        await expect(
+          tuition.connect(addr2).payFullTuition({ value: parseEther("4.1") })
+        ).to.be.revertedWith("FULL_TUITION_COSTS_4_ETHER");
+      });
+
+      it("Student can pay full tuition for 4 ETH", async () => {
+        await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
+
+        const studentPaid = await tuition.alreadyPaid(addr2.address);
+        expect(studentPaid).to.be.true;
+      });
+
+      it("Reverts if student already paid", async () => {
+        await tuition.connect(addr2).payFullTuition({ value: parseEther("4") });
+
+        await expect(
+          tuition.connect(addr2).payFullTuition({ value: parseEther("4") })
+        ).to.be.revertedWith("ALREADY_PAID");
+      });
+    });
+  });
+
+  describe("Staff only", () => {});
 
   describe("Refunds", () => {});
 
