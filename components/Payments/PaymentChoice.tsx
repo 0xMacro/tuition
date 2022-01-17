@@ -1,27 +1,34 @@
-import { Text, Flex } from "@chakra-ui/react";
+import { Text, Flex, useTheme } from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";
 
 type PaymentChoiceProps = {
   title: string;
-  buttonText: string;
   action: () => void;
 };
 
-const PaymentChoice = ({ title, buttonText, action }: PaymentChoiceProps) => {
+const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
+  const theme = useTheme();
+
   return (
     <Flex
-      py={6}
-      px={4}
+      p={5}
       my={4}
       justifyContent="space-between"
+      alignItems="center"
       fontSize="lg"
       fontWeight="bold"
-      boxShadow="sm"
+      bg="pink.400"
+      borderRadius={50}
+      boxShadow={`1px 4px 0 ${theme.colors.blue[300]}`}
+      color="gray.100"
+      _hover={{ cursor: "pointer" }}
+      onClick={action}
     >
       <Text>{title}</Text>
-      <Text _hover={{ cursor: "pointer" }} color="blue.400" onClick={action}>
-        {buttonText}
-      </Text>
+      <Flex>
+        <ArrowForwardIcon w={6} h={6} />
+      </Flex>
     </Flex>
   );
 };

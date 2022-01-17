@@ -1,14 +1,18 @@
 import Layout from "components/Layout";
 import Payments from "components/Payments/Payments";
-import { Center } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import SeaBackground from "components/SeaBackground";
 
 const Home = () => {
   return (
-    <Layout>
-      <Center h="60vh">
-        <Payments />
-      </Center>
-    </Layout>
+    <>
+      <Layout>
+        <Box>
+          <Payments />
+        </Box>
+      </Layout>
+      <SeaBackground />
+    </>
   );
 };
 

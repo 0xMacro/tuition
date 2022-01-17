@@ -10,7 +10,12 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <Navbar />
-      <Box py={{ base: 6, sm: 10 }} px={{ base: 2, sm: 10 }} w="full">
+      <Box
+        py={{ base: 6, sm: 10 }}
+        px={{ base: 4, sm: 10 }}
+        w="full"
+        zIndex={1}
+      >
         {children}
       </Box>
     </>

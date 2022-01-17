@@ -11,19 +11,17 @@ const Navbar = () => {
   };
 
   return (
-    <Flex
-      px={10}
-      py={6}
-      justifyContent="space-between"
-      alignItems="center"
-      boxShadow="md"
-      bg="gray.200"
-    >
+    <Flex px={10} py={6} justifyContent="space-between" alignItems="center">
       <Text fontSize="2xl" fontWeight="bold">
         SHIPYARD
       </Text>
       <Flex>
-        <Button onClick={handleWalletConnect}>
+        <Button
+          onClick={handleWalletConnect}
+          bg="pink.400"
+          color="gray.100"
+          _hover={{ bg: "blue.300" }}
+        >
           {account ? trimAddress(account) : "Connect Wallet"}
         </Button>
       </Flex>

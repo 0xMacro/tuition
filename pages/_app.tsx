@@ -8,11 +8,13 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <DAppProvider config={config}>
-      <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </DAppProvider>
+    <>
+      <DAppProvider config={config}>
+        <ChakraProvider theme={theme}>
+          <Component {...pageProps} />
+        </ChakraProvider>
+      </DAppProvider>
+    </>
   );
 }
 
