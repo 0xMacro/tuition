@@ -28,9 +28,9 @@ const Payments = () => {
     <Box mt={10}>
       <MotionBox variants={text} initial="hidden" animate="show">
         <Text
-          textAlign="left"
+          textAlign={{ base: "center", sm: "left" }}
           fontWeight="bold"
-          fontSize={{ base: "5xl", sm: "6xl" }}
+          fontSize={{ base: "4xl", md: "6xl" }}
         >
           🚀 Go Really Deep in Learning Solidity & Web3
         </Text>

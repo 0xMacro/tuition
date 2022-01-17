@@ -8,13 +8,13 @@ type PaymentChoiceProps = {
   action: () => void;
 };
 
-const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
+const PaymentChoice = ({ title }: PaymentChoiceProps) => {
   const theme = useTheme();
 
   return (
     <Button
       display="flex"
-      p={5}
+      p={{ base: 3, sm: 5 }}
       my={4}
       justifyContent="space-between"
       fontSize="lg"
