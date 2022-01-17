@@ -19,10 +19,10 @@ const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
       fontSize="lg"
       fontWeight="bold"
       bg="pink.400"
-      borderRadius={50}
+      borderRadius="md"
       boxShadow={`1px 4px 0 ${theme.colors.blue[300]}`}
       color="gray.100"
-      _hover={{ cursor: "pointer" }}
+      _hover={{ cursor: "pointer", bg: "blue.300", transition: "all 0.2s" }}
       onClick={action}
     >
       <Text>{title}</Text>

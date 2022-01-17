@@ -32,7 +32,7 @@ const Payments = () => {
           fontWeight="bold"
           fontSize={{ base: "5xl", sm: "6xl" }}
         >
-          Your best choice to get into Web3.
+          🚀 Go Really Deep in Learning Solidity & Web3
         </Text>
       </MotionBox>
       <MotionFlex
@@ -45,12 +45,15 @@ const Payments = () => {
       >
         <MotionBox variants={item}>
           <PaymentChoice
-            title="PAY 1 ETH FOR A RETURNABLE DEPOSIT"
+            title="CONTRIBUTE 1 ETH REFUNDABLE DEPOSIT"
             action={() => {}}
           />
         </MotionBox>
         <MotionBox variants={item}>
-          <PaymentChoice title="PAY 4 ETH FOR FULL TUITION" action={() => {}} />
+          <PaymentChoice
+            title="CONTRIBUTE 4 ETH FOR FULL TUITION"
+            action={() => {}}
+          />
         </MotionBox>
       </MotionFlex>
     </Box>
