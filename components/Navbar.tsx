@@ -1,5 +1,6 @@
 import React from "react";
-import { Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
+import Button from "components/Button";
 import { useEthers } from "@usedapp/core";
 import { trimAddress } from "utils/helpers";
 
@@ -16,12 +17,7 @@ const Navbar = () => {
         SHIPYARD
       </Text>
       <Flex>
-        <Button
-          onClick={handleWalletConnect}
-          bg="pink.400"
-          color="gray.100"
-          _hover={{ bg: "blue.300" }}
-        >
+        <Button action={handleWalletConnect}>
           {account ? trimAddress(account) : "Connect Wallet"}
         </Button>
       </Flex>
