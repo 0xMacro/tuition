@@ -31,12 +31,13 @@ const Payments = () => {
           textAlign={{ base: "center", sm: "left" }}
           fontWeight="bold"
           fontSize={{ base: "4xl", md: "6xl" }}
+          lineHeight={{ base: "2.8rem", md: "5rem" }}
         >
           🚀 Go Really Deep in Learning Solidity & Web3
         </Text>
       </MotionBox>
       <MotionFlex
-        mt={10}
+        mt={{ base: 5, md: 10 }}
         w={{ base: "100%", sm: "80%", md: "58%", lg: "36%" }}
         flexDirection="column"
         variants={container}
