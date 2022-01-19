@@ -27,29 +27,14 @@ contract Tuition is Ownable {
     }
 
     /**
-     * Take refundable deposit
+     * Takes a 1 ETH or 4 ETH contribution from a student
      */
-    function depositInsurance() public payable contractNotLocked {
+    function contribute() public payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
-        require(msg.value == 1 ether, "DEPOSIT_COSTS_1_ETHER");
+        require(msg.value == 1 ether || msg.value == 4 ether, "WRONG_AMOUNT");
 
         alreadyPaid[msg.sender] = true;
-        amountPaidBy[msg.sender] = 1 ether;
-    }
-
-    /**
-     * @todo Make payFullTuition and depositInsurance into one function
-     */
-
-    /**
-     * Take full tuition contribution
-     */
-    function payFullTuition() public payable contractNotLocked {
-        require(!alreadyPaid[msg.sender], "ALREADY_PAID");
-        require(msg.value == 4 ether, "FULL_TUITION_COSTS_4_ETHER");
-
-        alreadyPaid[msg.sender] = true;
-        amountPaidBy[msg.sender] = 4 ether;
+        amountPaidBy[msg.sender] = msg.value;
     }
 
     /**
