@@ -16,6 +16,7 @@ contract Tuition is Ownable {
     }
 
     modifier onlyStaff() {
+        // Owner should be considered part of staff
         require(isStaff[msg.sender] || msg.sender == owner(), "STAFF_ONLY");
         _;
     }
@@ -25,6 +26,9 @@ contract Tuition is Ownable {
         _;
     }
 
+    /**
+     * Take refundable deposit
+     */
     function depositInsurance() public payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
         require(msg.value == 1 ether, "DEPOSIT_COSTS_1_ETHER");
@@ -33,6 +37,13 @@ contract Tuition is Ownable {
         amountPaidBy[msg.sender] = 1 ether;
     }
 
+    /**
+     * @todo Make payFullTuition and depositInsurance into one function
+     */
+
+    /**
+     * Take full tuition contribution
+     */
     function payFullTuition() public payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
         require(msg.value == 4 ether, "FULL_TUITION_COSTS_4_ETHER");
@@ -41,6 +52,10 @@ contract Tuition is Ownable {
         amountPaidBy[msg.sender] = 4 ether;
     }
 
+    /**
+     * Allows staff to refund the entirety of a student's contribution
+     * @param account Student address to be refunded
+     */
     function refundUser(address account) public onlyStaff contractNotLocked {
         require(alreadyPaid[account], "STUDENT_DIDNT_PAY");
         require(amountPaidBy[account] > 0, "NOTHING_TO_REFUND");
@@ -53,6 +68,10 @@ contract Tuition is Ownable {
         require(success, "TRANSFER_FAILED");
     }
 
+    /**
+     * Allows staff to move a student's funds to treasury
+     * @param account Contributer of the funds to move to the treasury
+     */
     function moveStudentFundsToTreasury(address account)
         public
         onlyStaff
@@ -77,8 +96,10 @@ contract Tuition is Ownable {
         isStaff[account] = false;
     }
 
-    // In case of an emergency
-
+    /**
+     * @dev This function should only be used in case of an emergency to move all
+     *      funds to the treasury, it will permanently lock the contract
+     */
     function moveAllFundsToTreasury() public onlyOwner {
         (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
