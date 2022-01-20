@@ -9,11 +9,10 @@ export const TuitionObject = {
 export const tuition = new Contract(TuitionObject.address, TuitionObject.abi);
 
 export const getErrorFromReversion = (revertReason: string) => {
-  console.log(revertReason);
   const revertErrors = [
     "ALREADY_PAID",
+    "NOT_TAKING_PAYMENTS",
     "User denied transaction",
-    "errorSignature=null",
     "insufficient funds",
   ];
 
@@ -28,10 +27,10 @@ const mapErrorToFriendlyMessage = (error: string | undefined) => {
   switch (error) {
     case "ALREADY_PAID":
       return "You already donated!";
+    case "NOT_TAKING_PAYMENTS":
+      return "Not taking payments at the moment, please try again later.";
     case "User denied transaction":
       return "Transaction denied by user!";
-    case "errorSignature=null":
-      return "Error getting contract! Are you on the rinkeby network?";
     case "insufficient funds":
       return "Insufficient funds!";
     default:
