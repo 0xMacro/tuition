@@ -8,16 +8,17 @@ type PaymentChoiceProps = {
   action: () => void;
 };
 
-const PaymentChoice = ({ title }: PaymentChoiceProps) => {
+const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
   return (
     <Button
+      onClick={action}
       display="flex"
       p={{ base: 3, sm: 5 }}
       my={{ base: 3, md: 4 }}
       justifyContent="space-between"
       fontSize="lg"
     >
-      <Text>{title}</Text>
+      <Text userSelect="none">{title}</Text>
       <Flex>
         <ArrowForwardIcon w={6} h={6} />
       </Flex>

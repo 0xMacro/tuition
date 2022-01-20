@@ -3,8 +3,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import config from "config/dappConfig";
 import theme from "config/extendTheme";
+import { ToastContainer } from "react-toastify";
 import "@fontsource/roboto";
 import "../styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <DAppProvider config={config}>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />
+          <ToastContainer />
         </ChakraProvider>
       </DAppProvider>
     </>

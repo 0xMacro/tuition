@@ -3,12 +3,14 @@ import { Flex, Text } from "@chakra-ui/react";
 import Button from "components/Button";
 import { useEthers } from "@usedapp/core";
 import { trimAddress } from "utils/helpers";
+import { toast } from "react-toastify";
+import { activateWalletAndHandleError } from "utils";
 
 const Navbar = () => {
   const { account, activateBrowserWallet } = useEthers();
 
   const handleWalletConnect = async () => {
-    activateBrowserWallet();
+    activateWalletAndHandleError(activateBrowserWallet, toast);
   };
 
   return (
