@@ -3,7 +3,12 @@ import { Text, Box } from "@chakra-ui/react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
 import { useContractFunction, useEthers } from "@usedapp/core";
-import { activateWalletAndHandleError, tuition } from "utils";
+import {
+  activateWalletAndHandleError,
+  getErrorFromReversion,
+  handleContractInteractionResponse,
+  tuition,
+} from "utils";
 import { parseEther } from "ethers/lib/utils";
 import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import { useState } from "react";
@@ -26,8 +31,9 @@ const item = {
 };
 
 const Payments = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const { account, activateBrowserWallet } = useEthers();
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedChoice, setSelectedChoice] = useState("");
   const userAlreadyPaid = useUserAlreadyPaid(account);
   const { state: contributionStatus, send: contribute } = useContractFunction(
     tuition,
@@ -35,22 +41,21 @@ const Payments = () => {
   );
 
   useEffect(() => {
-    if (userAlreadyPaid !== undefined) {
-      setIsLoading(false);
+    if (selectedChoice && account) {
+      handleContribution(selectedChoice as "1" | "4");
+      setSelectedChoice("");
     }
-  }, [userAlreadyPaid]);
+  }, [account]);
 
   useEffect(() => {
-    if (contributionStatus.status === "Success") {
-      setIsLoading(false);
-    }
+    handleContractInteractionResponse(contributionStatus, toast);
   }, [contributionStatus]);
 
   const handleContribution = (amount: "1" | "4") => {
     if (account) {
-      setIsLoading(true);
       contribute({ value: parseEther(amount) });
     } else {
+      setSelectedChoice(amount);
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
   };
@@ -65,18 +70,24 @@ const Payments = () => {
       animate="show"
     >
       <Loading isLoading={isLoading}>
-        <MotionBox variants={item}>
-          <PaymentChoice
-            title="CONTRIBUTE 1 ETH REFUNDABLE DEPOSIT"
-            action={() => handleContribution("1")}
-          />
-        </MotionBox>
-        <MotionBox variants={item}>
-          <PaymentChoice
-            title="CONTRIBUTE 4 ETH FOR FULL TUITION"
-            action={() => handleContribution("4")}
-          />
-        </MotionBox>
+        {!account && userAlreadyPaid ? (
+          "Thank you for your contribution!"
+        ) : (
+          <>
+            <MotionBox variants={item}>
+              <PaymentChoice
+                title="CONTRIBUTE 1 ETH REFUNDABLE DEPOSIT"
+                action={() => handleContribution("1")}
+              />
+            </MotionBox>
+            <MotionBox variants={item}>
+              <PaymentChoice
+                title="CONTRIBUTE 4 ETH FOR FULL TUITION"
+                action={() => handleContribution("4")}
+              />
+            </MotionBox>
+          </>
+        )}
       </Loading>
     </MotionFlex>
   );

@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <DAppProvider config={config}>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />
-          <ToastContainer />
+          <ToastContainer hideProgressBar />
         </ChakraProvider>
       </DAppProvider>
     </>

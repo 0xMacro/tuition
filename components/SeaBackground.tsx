@@ -28,6 +28,7 @@ function SeaBackground() {
         bottom={20}
         left={5}
         animation={animation}
+        userSelect="none"
       >
         <Image src="/assets/boat.gif" layout="fill" />
       </Box>
