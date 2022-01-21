@@ -6,7 +6,10 @@ describe("Tuition contract", function () {
   beforeEach(async () => {
     [addr1, owner, addr2, treasury, ...addrs] = await ethers.getSigners();
     const Tuition = await ethers.getContractFactory("Tuition");
-    tuition = await Tuition.deploy(owner.address, treasury.address);
+    tuition = await Tuition.deploy(owner.address, treasury.address, [
+      addr1.address,
+      addrs[10].address,
+    ]);
   });
 
   describe("Deployment", () => {
@@ -15,9 +18,11 @@ describe("Tuition contract", function () {
       expect(contractOwner).to.be.equal(owner.address);
     });
 
-    it("Makes the deployer part of staff", async () => {
+    it("Makes the initialStaff part of staff", async () => {
       const isAddr1Staff = await tuition.isStaff(addr1.address);
+      const isAddr10Staff = await tuition.isStaff(addrs[10].address);
       expect(isAddr1Staff).to.be.true;
+      expect(isAddr10Staff).to.be.true;
     });
   });
 
@@ -100,7 +105,7 @@ describe("Tuition contract", function () {
         [parseEther("-4"), parseEther("4")]
       );
 
-      expect(await tuition.amountPaidBy(addr2.address)).to.be.equal(0);
+      expect(await tuition.balance(addr2.address)).to.be.equal(0);
       expect(await tuition.alreadyPaid(addr2.address)).to.be.false;
     });
   });
@@ -116,18 +121,14 @@ describe("Tuition contract", function () {
         [parseEther("-4"), parseEther("4")]
       );
 
-      expect(await tuition.amountPaidBy(addr2.address)).to.be.equal(0);
+      expect(await tuition.balance(addr2.address)).to.be.equal(0);
       expect(await tuition.alreadyPaid(addr2.address)).to.be.false;
     });
 
     it("Moves all contract funds to treasury", async () => {
       await tuition.connect(addr2).contribute({ value: parseEther("4") });
-      await tuition
-        .connect(addrs[0])
-        .contribute({ value: parseEther("4") });
-      await tuition
-        .connect(addrs[1])
-        .contribute({ value: parseEther("1") });
+      await tuition.connect(addrs[0]).contribute({ value: parseEther("4") });
+      await tuition.connect(addrs[1]).contribute({ value: parseEther("1") });
 
       await expect(
         await tuition.connect(owner).moveAllFundsToTreasury()

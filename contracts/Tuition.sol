@@ -4,14 +4,20 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Tuition is Ownable {
     address public TREASURY;
-    bool public allowPayments;
+    bool public locked;
     mapping(address => bool) public isStaff;
     mapping(address => bool) public alreadyPaid;
-    mapping(address => uint256) public amountPaidBy;
+    mapping(address => uint256) public balance;
 
-    constructor(address newOwner, address treasury) {
-        allowPayments = true;
-        isStaff[msg.sender] = true;
+    constructor(
+        address newOwner,
+        address treasury,
+        address[] memory initialStaff
+    ) {
+        for (uint256 i = 0; i < initialStaff.length; i++) {
+            isStaff[initialStaff[i]] = true;
+        }
+        locked = true;
         TREASURY = treasury;
         transferOwnership(newOwner);
     }
@@ -23,7 +29,7 @@ contract Tuition is Ownable {
     }
 
     modifier contractNotLocked() {
-        require(allowPayments, "NOT_TAKING_PAYMENTS");
+        require(locked, "NOT_TAKING_PAYMENTS");
         _;
     }
 
@@ -35,7 +41,7 @@ contract Tuition is Ownable {
         require(msg.value == 1 ether || msg.value == 4 ether, "WRONG_AMOUNT");
 
         alreadyPaid[msg.sender] = true;
-        amountPaidBy[msg.sender] = msg.value;
+        balance[msg.sender] = msg.value;
     }
 
     /**
@@ -44,10 +50,10 @@ contract Tuition is Ownable {
      */
     function refundUser(address account) external onlyStaff contractNotLocked {
         require(alreadyPaid[account], "STUDENT_DIDNT_PAY");
-        require(amountPaidBy[account] > 0, "NOTHING_TO_REFUND");
+        require(balance[account] > 0, "NOTHING_TO_REFUND");
 
-        uint256 amountToRefund = amountPaidBy[account];
-        amountPaidBy[account] = 0;
+        uint256 amountToRefund = balance[account];
+        balance[account] = 0;
         alreadyPaid[account] = false;
 
         (bool success, ) = account.call{value: amountToRefund}("");
@@ -64,10 +70,10 @@ contract Tuition is Ownable {
         contractNotLocked
     {
         require(alreadyPaid[account], "STUDENT_DIDNT_PAY");
-        require(amountPaidBy[account] > 0, "NO_FUNDS_AVAILABLE");
+        require(balance[account] > 0, "NO_FUNDS_AVAILABLE");
 
-        uint256 amountToMove = amountPaidBy[account];
-        amountPaidBy[account] = 0;
+        uint256 amountToMove = balance[account];
+        balance[account] = 0;
         alreadyPaid[account] = false;
 
         (bool success, ) = TREASURY.call{value: amountToMove}("");
@@ -89,6 +95,6 @@ contract Tuition is Ownable {
     function moveAllFundsToTreasury() external onlyOwner {
         (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
-        allowPayments = false;
+        locked = false;
     }
 }
