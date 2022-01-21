@@ -30,7 +30,7 @@ function SeaBackground() {
         animation={animation}
         userSelect="none"
       >
-        <Image src="/assets/boat.gif" layout="fill" />
+        <Image src="/assets/boat.gif" alt="boat" layout="fill" />
       </Box>
       <Wave
         fill={theme.colors.blue[300]}

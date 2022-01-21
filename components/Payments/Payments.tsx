@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
 import { useContractFunction, useEthers } from "@usedapp/core";
@@ -39,26 +39,29 @@ const Payments = () => {
     "contribute"
   );
 
+  const handleContribution = useCallback(
+    (amount: "1" | "4") => {
+      if (account) {
+        contribute({ value: parseEther(amount) });
+      } else {
+        setSelectedChoice(amount);
+        activateWalletAndHandleError(activateBrowserWallet, toast);
+      }
+    },
+    [account, contribute, setSelectedChoice, activateBrowserWallet]
+  );
+
   useEffect(() => {
     // Continue the flow in case an user connected when clicking on Pay
     if (selectedChoice && account) {
       handleContribution(selectedChoice as "1" | "4");
       setSelectedChoice("");
     }
-  }, [account]);
+  }, [account, handleContribution, selectedChoice]);
 
   useEffect(() => {
     handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
   }, [contributionStatus]);
-
-  const handleContribution = (amount: "1" | "4") => {
-    if (account) {
-      contribute({ value: parseEther(amount) });
-    } else {
-      setSelectedChoice(amount);
-      activateWalletAndHandleError(activateBrowserWallet, toast);
-    }
-  };
 
   return (
     <MotionFlex
