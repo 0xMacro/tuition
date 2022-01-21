@@ -17,7 +17,6 @@ contract Tuition is Ownable {
         for (uint256 i = 0; i < initialStaff.length; i++) {
             isStaff[initialStaff[i]] = true;
         }
-        locked = true;
         TREASURY = treasury;
         transferOwnership(newOwner);
     }
@@ -29,7 +28,7 @@ contract Tuition is Ownable {
     }
 
     modifier contractNotLocked() {
-        require(locked, "NOT_TAKING_PAYMENTS");
+        require(!locked, "NOT_TAKING_PAYMENTS");
         _;
     }
 
@@ -98,6 +97,6 @@ contract Tuition is Ownable {
     function moveAllFundsToTreasury() external onlyOwner {
         (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
-        locked = false;
+        locked = true;
     }
 }
