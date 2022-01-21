@@ -3,7 +3,7 @@ import { Contract } from "ethers";
 
 export const TuitionObject = {
   abi: Tuition.abi,
-  address: "0xeE9288e7EB856eFa858d7414c27F46BCE252A7A2",
+  address: "0x09484bC3Da007A650160032b9558ccda03e9514c",
 };
 
 export const tuition = new Contract(TuitionObject.address, TuitionObject.abi);
