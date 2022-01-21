@@ -80,12 +80,15 @@ contract Tuition is Ownable {
         require(success, "TRANSFER_FAILED");
     }
 
-    function addStaff(address account) external onlyOwner {
-        isStaff[account] = true;
-    }
-
-    function removeStaff(address account) external onlyOwner {
-        isStaff[account] = false;
+    /**
+     * @param account Account to add/remove of staff
+     * @param isAddingStaff Boolean variable that will add or remove the account as staff
+     */
+    function manageStaff(address account, bool isAddingStaff)
+        external
+        onlyOwner
+    {
+        isStaff[account] = isAddingStaff;
     }
 
     /**
