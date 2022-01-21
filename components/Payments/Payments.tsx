@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
-import { Text, Box } from "@chakra-ui/react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
 import { useContractFunction, useEthers } from "@usedapp/core";
 import {
   activateWalletAndHandleError,
-  getErrorFromReversion,
   handleContractInteractionResponse,
   tuition,
 } from "utils";
@@ -14,6 +12,7 @@ import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import { useState } from "react";
 import Loading from "components/Loading";
 import { toast } from "react-toastify";
+import ThankYou from "./ThankYou";
 
 const container = {
   hidden: { opacity: 0 },
@@ -41,6 +40,7 @@ const Payments = () => {
   );
 
   useEffect(() => {
+    // Continue the flow in case an user connected when clicking on Pay
     if (selectedChoice && account) {
       handleContribution(selectedChoice as "1" | "4");
       setSelectedChoice("");
@@ -48,7 +48,7 @@ const Payments = () => {
   }, [account]);
 
   useEffect(() => {
-    handleContractInteractionResponse(contributionStatus, toast);
+    handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
   }, [contributionStatus]);
 
   const handleContribution = (amount: "1" | "4") => {
@@ -70,8 +70,8 @@ const Payments = () => {
       animate="show"
     >
       <Loading isLoading={isLoading}>
-        {!account && userAlreadyPaid ? (
-          "Thank you for your contribution!"
+        {account && userAlreadyPaid ? (
+          <ThankYou itemVariant={item} />
         ) : (
           <>
             <MotionBox variants={item}>

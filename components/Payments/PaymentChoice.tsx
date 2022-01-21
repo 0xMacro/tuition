@@ -1,4 +1,4 @@
-import { Text, Flex, useTheme } from "@chakra-ui/react";
+import { Text, Flex } from "@chakra-ui/react";
 import Button from "components/Button";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";

@@ -56,7 +56,7 @@ contract Tuition is Ownable {
 
     /**
      * Allows staff to move a student's funds to treasury
-     * @param account Contributer of the funds to move to the treasury
+     * @param account Contributor of the funds to move to the treasury
      */
     function moveStudentFundsToTreasury(address account)
         external

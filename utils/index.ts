@@ -3,7 +3,7 @@ import { Contract } from "ethers";
 
 export const TuitionObject = {
   abi: Tuition.abi,
-  address: "0x818df997213BE7db19EBc1f25902C08E3Ec8d43F",
+  address: "0xeE9288e7EB856eFa858d7414c27F46BCE252A7A2",
 };
 
 export const tuition = new Contract(TuitionObject.address, TuitionObject.abi);
@@ -26,7 +26,7 @@ export const getErrorFromReversion = (revertReason: string) => {
 const mapErrorToFriendlyMessage = (error: string | undefined) => {
   switch (error) {
     case "ALREADY_PAID":
-      return "You already donated!";
+      return "You already contributed!";
     case "NOT_TAKING_PAYMENTS":
       return "Not taking payments at the moment, please try again later.";
     case "User denied transaction":
@@ -46,19 +46,24 @@ export const activateWalletAndHandleError = (activate: any, toast: any) => {
 
 export const handleContractInteractionResponse = async (
   state: any,
-  toast: any
+  toast: any,
+  setIsLoading: any
 ) => {
   switch (state.status) {
     case "Fail":
     case "Exception":
       toast.error(getErrorFromReversion(state.errorMessage as string));
+      setIsLoading(false);
       break;
     case "Mining":
       toast.success(
         "Transaction sent! Waiting for confirmation from the network..."
       );
+      setIsLoading(true);
+      break;
     case "Success":
-      toast.success("Transaction mined!");
+      toast.success("Transaction mined. Thank you for your contribution!");
+      setIsLoading(false);
       break;
   }
 };

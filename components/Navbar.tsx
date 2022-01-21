@@ -14,7 +14,13 @@ const Navbar = () => {
   };
 
   return (
-    <Flex px={10} py={6} justifyContent="space-between" alignItems="center">
+    <Flex
+      px={10}
+      py={6}
+      justifyContent="space-between"
+      alignItems="center"
+      userSelect="none"
+    >
       <Text fontSize="2xl" fontWeight="bold">
         SHIPYARD
       </Text>
