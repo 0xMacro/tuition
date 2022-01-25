@@ -66,7 +66,7 @@ const Payments = () => {
   return (
     <MotionFlex
       mt={{ base: 5, md: 10 }}
-      w={{ base: "100%", sm: "80%", md: "58%", lg: "36%" }}
+      w={{ base: "100%", sm: "80%", md: "70%", lg: "52%", xl: "40%" }}
       flexDirection="column"
       variants={container}
       initial="hidden"

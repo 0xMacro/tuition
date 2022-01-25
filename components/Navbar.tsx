@@ -15,13 +15,13 @@ const Navbar = () => {
 
   return (
     <Flex
-      px={10}
+      px={{ base: 4, sm: 14 }}
       py={6}
       justifyContent="space-between"
       alignItems="center"
       userSelect="none"
     >
-      <Text fontSize="2xl" fontWeight="bold">
+      <Text fontSize="2xl" fontWeight="bold" color="gray.100">
         SHIPYARD
       </Text>
       <Flex>

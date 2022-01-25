@@ -13,7 +13,6 @@
     "@chakra-ui/react": "^1.7.4",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
-    "@fontsource/roboto": "^4.5.1",
     "@openzeppelin/contracts": "^4.4.1",
     "@usedapp/core": "^0.9.0",
     "framer-motion": "^5",

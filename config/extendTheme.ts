@@ -1,14 +1,18 @@
 import { extendTheme } from "@chakra-ui/react";
 
 const theme = extendTheme({
-  fonts: {
-    heading: "Roboto",
-    body: "Roboto",
+  colors: {
+    blue: {
+      900: "#001226",
+    },
+    red: {
+      700: "#953333",
+    },
   },
   styles: {
     global: {
       body: {
-        bg: "linear-gradient(180deg, rgba(143,204,236,1) 28%, rgba(255,255,255,1) 100%)",
+        bg: "#001226",
         minHeight: "100vh",
       },
     },

@@ -13,7 +13,7 @@ const Loading = ({ isLoading, children }: LoadingProps) => {
     <div>
       {isLoading ? (
         <Flex justifyContent={{ base: "center", sm: "flex-start" }}>
-          <ClipLoader color={theme.colors.blue[300]} size={80} />{" "}
+          <ClipLoader color={theme.colors.blue[900]} size={80} />{" "}
         </Flex>
       ) : (
         children

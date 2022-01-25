@@ -33,7 +33,7 @@ function SeaBackground() {
         <Image src="/assets/boat.gif" alt="boat" layout="fill" />
       </Box>
       <Wave
-        fill={theme.colors.blue[300]}
+        fill={theme.colors.blue[800]}
         style={{ position: "absolute", bottom: 0, zIndex: -2 }}
       />
     </>
