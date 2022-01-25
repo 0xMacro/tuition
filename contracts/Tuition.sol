@@ -94,7 +94,10 @@ contract Tuition is Ownable {
      * @dev This function should only be used in case of an emergency or a redeployment
      *      to move all funds to the treasury, it will permanently lock the contract
      */
-    function moveAllFundsToTreasury() external onlyOwner {
+    function permanentlyMoveAllFundsToTreasuryAndLockContract()
+        external
+        onlyOwner
+    {
         (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
         locked = true;
