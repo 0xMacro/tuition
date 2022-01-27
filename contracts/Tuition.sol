@@ -91,6 +91,13 @@ contract Tuition is Ownable {
     }
 
     /**
+     * @param newTreasury New treasury address
+     */
+    function changeTreasuryAddress(address newTreasury) external onlyOwner {
+        TREASURY = newTreasury;
+    }
+
+    /**
      * @dev This function should only be used in case of an emergency or a redeployment
      *      to move all funds to the treasury, it will permanently lock the contract
      */
@@ -98,8 +105,8 @@ contract Tuition is Ownable {
         external
         onlyOwner
     {
+        locked = true;
         (bool success, ) = TREASURY.call{value: address(this).balance}("");
         require(success, "TRANSFER_FAILED");
-        locked = true;
     }
 }

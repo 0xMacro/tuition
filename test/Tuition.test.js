@@ -42,9 +42,15 @@ describe("Tuition contract", function () {
     });
 
     it("Only owner can move all funds to treasury", async () => {
-      await expect(tuition.permanentlyMoveAllFundsToTreasuryAndLockContract()).to.be.revertedWith(
-        "Ownable: caller is not the owner"
-      );
+      await expect(
+        tuition.permanentlyMoveAllFundsToTreasuryAndLockContract()
+      ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+
+    it("Only owner can change the treasury address", async () => {
+      await expect(
+        tuition.changeTreasuryAddress(addrs[10].address)
+      ).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
 
@@ -131,12 +137,16 @@ describe("Tuition contract", function () {
       await tuition.connect(addrs[1]).contribute({ value: parseEther("1") });
 
       await expect(
-        await tuition.connect(owner).permanentlyMoveAllFundsToTreasuryAndLockContract()
+        await tuition
+          .connect(owner)
+          .permanentlyMoveAllFundsToTreasuryAndLockContract()
       ).to.changeEtherBalance(treasury, parseEther("9"));
     });
 
     it("Blocks fund movement once all funds have been transferred treasury", async () => {
-      await tuition.connect(owner).permanentlyMoveAllFundsToTreasuryAndLockContract();
+      await tuition
+        .connect(owner)
+        .permanentlyMoveAllFundsToTreasuryAndLockContract();
 
       await expect(
         tuition.connect(addr2).contribute({ value: parseEther("4") })
@@ -162,6 +172,16 @@ describe("Tuition contract", function () {
       await tuition.connect(owner).manageStaff(addr2.address, true);
       await tuition.connect(owner).manageStaff(addr2.address, false);
       expect(await tuition.isStaff(addr2.address)).to.be.false;
+    });
+  });
+
+  describe("Treasury", () => {
+    it("Allows to change the treasury address", async () => {
+      const currentTreasury = await tuition.TREASURY();
+      expect(currentTreasury).to.not.be.equal(addrs[10].address);
+      await tuition.connect(owner).changeTreasuryAddress(addrs[10].address);
+      const newTreasury = await tuition.TREASURY();
+      expect(newTreasury).to.be.equal(addrs[10].address);
     });
   });
 });
