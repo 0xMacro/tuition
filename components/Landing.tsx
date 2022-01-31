@@ -14,9 +14,9 @@ const Landing = () => {
       <MotionBox variants={text} initial="hidden" animate="show">
         <Text
           color="gray.100"
-          textAlign={{ base: "center", sm: "left" }}
+          textAlign="left"
           fontWeight="bold"
-          fontSize={{ base: "4xl", md: "5xl", xl: "6xl" }}
+          fontSize={{ base: "3xl", md: "5xl", xl: "6xl" }}
           lineHeight={{ base: "2.8rem", md: "5rem" }}
         >
           🚀 Go Really Deep in Learning Solidity & Web3

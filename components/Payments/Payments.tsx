@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
 import { useContractFunction, useEthers } from "@usedapp/core";
@@ -7,11 +7,11 @@ import {
   handleContractInteractionResponse,
   tuition,
 } from "utils";
+import { toast } from "react-toastify";
 import { parseEther } from "ethers/lib/utils";
 import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
-import { useState } from "react";
+import { Text } from "@chakra-ui/react";
 import Loading from "components/Loading";
-import { toast } from "react-toastify";
 import ThankYou from "./ThankYou";
 
 const container = {
@@ -40,7 +40,7 @@ const Payments = () => {
   );
 
   const handleContribution = useCallback(
-    (amount: "1" | "4") => {
+    (amount: "1") => {
       if (account) {
         contribute({ value: parseEther(amount) });
       } else {
@@ -54,7 +54,7 @@ const Payments = () => {
   useEffect(() => {
     // Continue the flow in case an user connected when clicking on Pay
     if (selectedChoice && account) {
-      handleContribution(selectedChoice as "1" | "4");
+      handleContribution(selectedChoice as "1");
       setSelectedChoice("");
     }
   }, [account, handleContribution, selectedChoice]);
@@ -79,15 +79,12 @@ const Payments = () => {
           <>
             <MotionBox variants={item}>
               <PaymentChoice
-                title="CONTRIBUTE 1 ETH REFUNDABLE DEPOSIT"
+                title="CONTRIBUTE 1 ETH AND GET STARTED"
                 action={() => handleContribution("1")}
               />
-            </MotionBox>
-            <MotionBox variants={item}>
-              <PaymentChoice
-                title="CONTRIBUTE 4 ETH FOR FULL TUITION"
-                action={() => handleContribution("4")}
-              />
+              <Text color="gray.100" fontSize="sm">
+                *refundable on job acceptance
+              </Text>
             </MotionBox>
           </>
         )}

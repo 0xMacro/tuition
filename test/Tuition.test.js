@@ -70,7 +70,7 @@ describe("Tuition contract", function () {
 
   describe("Payments", () => {
     describe("Contributing", () => {
-      it("Reverts if not exactly 1 or 4 ETH", async () => {
+      it("Reverts if not exactly 1 ETH", async () => {
         await expect(
           tuition.connect(addr2).contribute({ value: parseEther("1.1") })
         ).to.be.revertedWith("WRONG_AMOUNT");
@@ -83,15 +83,8 @@ describe("Tuition contract", function () {
         expect(studentPaid).to.be.true;
       });
 
-      it("Student can pay full tuition for 4 ETH", async () => {
-        await tuition.connect(addr2).contribute({ value: parseEther("4") });
-
-        const studentPaid = await tuition.alreadyPaid(addr2.address);
-        expect(studentPaid).to.be.true;
-      });
-
       it("Reverts if student already paid", async () => {
-        await tuition.connect(addr2).contribute({ value: parseEther("4") });
+        await tuition.connect(addr2).contribute({ value: parseEther("1") });
 
         await expect(
           tuition.connect(addr2).contribute({ value: parseEther("1") })
@@ -102,13 +95,13 @@ describe("Tuition contract", function () {
 
   describe("Refunds", () => {
     it("Refunds a student", async () => {
-      await tuition.connect(addr2).contribute({ value: parseEther("4") });
+      await tuition.connect(addr2).contribute({ value: parseEther("1") });
 
       await expect(() =>
         tuition.refundUser(addr2.address)
       ).to.changeEtherBalances(
         [tuition, addr2],
-        [parseEther("-4"), parseEther("4")]
+        [parseEther("-1"), parseEther("1")]
       );
 
       expect(await tuition.balance(addr2.address)).to.be.equal(0);
@@ -118,13 +111,13 @@ describe("Tuition contract", function () {
 
   describe("Moving to treasury", () => {
     it("Moves a student funds to treasury", async () => {
-      await tuition.connect(addr2).contribute({ value: parseEther("4") });
+      await tuition.connect(addr2).contribute({ value: parseEther("1") });
 
       await expect(() =>
         tuition.moveStudentFundsToTreasury(addr2.address)
       ).to.changeEtherBalances(
         [tuition, treasury],
-        [parseEther("-4"), parseEther("4")]
+        [parseEther("-1"), parseEther("1")]
       );
 
       expect(await tuition.balance(addr2.address)).to.be.equal(0);
@@ -132,15 +125,15 @@ describe("Tuition contract", function () {
     });
 
     it("Moves all contract funds to treasury", async () => {
-      await tuition.connect(addr2).contribute({ value: parseEther("4") });
-      await tuition.connect(addrs[0]).contribute({ value: parseEther("4") });
+      await tuition.connect(addr2).contribute({ value: parseEther("1") });
+      await tuition.connect(addrs[0]).contribute({ value: parseEther("1") });
       await tuition.connect(addrs[1]).contribute({ value: parseEther("1") });
 
       await expect(
         await tuition
           .connect(owner)
           .permanentlyMoveAllFundsToTreasuryAndLockContract()
-      ).to.changeEtherBalance(treasury, parseEther("9"));
+      ).to.changeEtherBalance(treasury, parseEther("3"));
     });
 
     it("Blocks fund movement once all funds have been transferred treasury", async () => {
@@ -149,7 +142,7 @@ describe("Tuition contract", function () {
         .permanentlyMoveAllFundsToTreasuryAndLockContract();
 
       await expect(
-        tuition.connect(addr2).contribute({ value: parseEther("4") })
+        tuition.connect(addr2).contribute({ value: parseEther("1") })
       ).to.be.revertedWith("NOT_TAKING_PAYMENTS");
 
       await expect(tuition.refundUser(addr2.address)).to.be.revertedWith(

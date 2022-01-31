@@ -33,11 +33,11 @@ contract Tuition is Ownable {
     }
 
     /**
-     * Takes a 1 ETH or 4 ETH contribution from a student
+     * Takes a 1 ETH contribution from a student
      */
     function contribute() external payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
-        require(msg.value == 1 ether || msg.value == 4 ether, "WRONG_AMOUNT");
+        require(msg.value == 1 ether, "WRONG_AMOUNT");
 
         alreadyPaid[msg.sender] = true;
         balance[msg.sender] = msg.value;
