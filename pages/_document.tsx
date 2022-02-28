@@ -5,6 +5,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <title>Shipyard Tuition</title>
           <link
             rel="stylesheet"
             href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css"
