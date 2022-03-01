@@ -13,15 +13,14 @@ const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
     <Button
       onClick={action}
       display="flex"
-      p={{ base: 3, sm: 5 }}
+      p={{ base: 3, sm: 4 }}
       my={{ base: 3, md: 4 }}
-      justifyContent="space-between"
+      justifyContent="center"
       fontSize="lg"
     >
-      <Text userSelect="none">{title}</Text>
-      <Flex>
-        <ArrowForwardIcon w={6} h={6} />
-      </Flex>
+      <Text textAlign="center" userSelect="none">
+        {title}
+      </Text>
     </Button>
   );
 };

@@ -16,10 +16,18 @@ const Landing = () => {
           color="gray.100"
           textAlign="left"
           fontWeight="bold"
-          fontSize={{ base: "3xl", md: "5xl", xl: "6xl" }}
+          fontSize={{ base: "3xl", md: "5xl" }}
           lineHeight={{ base: "2.8rem", md: "5rem" }}
         >
-          🚀 Go Really Deep in Learning Solidity & Web3
+          Shipyard School
+        </Text>
+        <Text
+          mt="4"
+          color="gray.100"
+          textAlign="left"
+          fontSize={{ base: "lg", md: "xl" }}
+        >
+          Get advanced training in Solidity & Web3
         </Text>
       </MotionBox>
       <Payments />

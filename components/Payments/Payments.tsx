@@ -10,7 +10,6 @@ import {
 import { toast } from "react-toastify";
 import { parseEther } from "ethers/lib/utils";
 import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
-import { Text } from "@chakra-ui/react";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
 
@@ -65,8 +64,8 @@ const Payments = () => {
 
   return (
     <MotionFlex
-      mt={{ base: 5, md: 10 }}
-      w={{ base: "100%", sm: "80%", md: "70%", lg: "52%", xl: "40%" }}
+      mt={7}
+      w={{ base: "100%", sm: "90%", md: "64%", lg: "44%", xl: "27%" }}
       flexDirection="column"
       variants={container}
       initial="hidden"
@@ -79,12 +78,9 @@ const Payments = () => {
           <>
             <MotionBox variants={item}>
               <PaymentChoice
-                title="CONTRIBUTE 1 ETH AND GET STARTED"
+                title="Contribute 1 ETH and Get Started"
                 action={() => handleContribution("1")}
               />
-              <Text color="gray.100" fontSize="sm">
-                *refundable on job acceptance
-              </Text>
             </MotionBox>
           </>
         )}
