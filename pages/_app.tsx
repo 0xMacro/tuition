@@ -4,12 +4,20 @@ import type { AppProps } from "next/app";
 import config from "config/dappConfig";
 import theme from "config/extendTheme";
 import { ToastContainer } from "react-toastify";
+import Head from "next/head";
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
+      <Head>
+        <title>Shipyard Tuition</title>
+        <link
+          rel="stylesheet"
+          href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css"
+        />
+      </Head>
       <DAppProvider config={config}>
         <ChakraProvider theme={theme}>
           <Component {...pageProps} />
