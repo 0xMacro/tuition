@@ -16,4 +16,4 @@ Ended up sticking to a 1 ETH payment so students will always see the same price 
 
 This dapp will be extended to add a Pay-To-Earn section. 
 
-Here, students will be able to do a precourse to get them up to the level required to apply for our main bootcamp, as well as earn our ERC20 token in the process.
+Here, students will be able to do a precourse to get them up to the level required to apply for our main bootcamp, as well as earn the DAO's ERC20 token in the process.
