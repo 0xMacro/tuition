@@ -1,6 +1,6 @@
 # Tuition DApp
 
-Live on [tuition.shipyard.xyz](tuition.shipyard.xyz)!
+Live on [tuition.shipyard.xyz](https://tuition.shipyard.xyz)!
 
 ## Functionality
 
