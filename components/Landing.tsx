@@ -19,7 +19,7 @@ const Landing = () => {
           fontSize={{ base: "3xl", md: "5xl" }}
           lineHeight={{ base: "2.8rem", md: "5rem" }}
         >
-          Shipyard School
+          Macro School
         </Text>
         <Text
           mt="4"

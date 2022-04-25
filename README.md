@@ -1,10 +1,10 @@
 # Tuition DApp
 
-Live on [tuition.shipyard.xyz](https://tuition.shipyard.xyz)!
+Live on [tuition.0xmacro.com](https://tuition.0xmacro.com)!
 
 ## Functionality
 
-This dapp connects to the deployed tuition smart contract, allowing Shipyard's students to deposit their 1 ETH payment, and according to the outcomes, getting refunded or moving to the DAO's treasury.
+This dapp connects to the deployed tuition smart contract, allowing Macro's students to deposit their 1 ETH payment, and according to the outcomes, getting refunded or moving to the DAO's treasury.
 
 ## Pricing display
 

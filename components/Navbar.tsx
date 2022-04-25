@@ -22,7 +22,7 @@ const Navbar = () => {
       userSelect="none"
     >
       <Text fontSize="2xl" fontWeight="bold" color="gray.100">
-        SHIPYARD
+        MACRO
       </Text>
       <Flex>
         <Button action={handleWalletConnect}>
