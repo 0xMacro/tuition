@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Shipyard Tuition</title>
+        <title>Macro Tuition</title>
         <link
           rel="stylesheet"
           href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack-subset.css"
