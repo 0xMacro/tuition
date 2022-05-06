@@ -1,10 +1,11 @@
 import React from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Button from "components/Button";
 import { useEthers } from "@usedapp/core";
 import { trimAddress } from "utils/helpers";
 import { toast } from "react-toastify";
 import { activateWalletAndHandleError } from "utils";
+import Image from "next/image";
 
 const Navbar = () => {
   const { account, activateBrowserWallet } = useEthers();
@@ -21,9 +22,13 @@ const Navbar = () => {
       alignItems="center"
       userSelect="none"
     >
-      <Text fontSize="2xl" fontWeight="bold" color="gray.100">
-        MACRO
-      </Text>
+      <Box
+        w={250}
+        h={125}
+        position="relative"
+      >
+        <Image layout="fill" src="/assets/macro-logo.png" alt="boat" />
+      </Box>
       <Flex>
         <Button action={handleWalletConnect}>
           {account ? trimAddress(account) : "Connect Wallet"}

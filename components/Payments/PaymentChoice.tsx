@@ -1,6 +1,5 @@
-import { Text, Flex } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import Button from "components/Button";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";
 
 type PaymentChoiceProps = {

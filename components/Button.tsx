@@ -8,8 +8,9 @@ const Button = ({ action, children, ...props }: any) => {
       py={2}
       px={4}
       fontWeight="bold"
-      bg="red.700"
+      bg="black"
       color="gray.100"
+      borderRadius={30}
       _hover={{ cursor: "pointer", background: "blue.800", transition: "all 0.2s" }}
       {...props}
     >
