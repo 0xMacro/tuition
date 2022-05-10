@@ -1,3 +1,14 @@
+@font-face {
+  font-family: "Gothic";
+  src: url("/fonts/Gothic/AllRoundGothic-Thick.otf");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Kievit";
+  src: url("/fonts/Kievit/KievitPro.otf");
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -6,5 +17,5 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: "Hack" !important;
+  font-family: "Kievit" !important;
 }

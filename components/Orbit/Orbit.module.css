@@ -1,9 +1,6 @@
 /* ---------- Container for the orbiting circles animation ---------- */
 #circle-orbit-container {
   transform: skewX(-30deg) scaleX(1.3) scaleY(1.2);
-  position: relative;
-  top: 200px;
-  right: -300px;
 }
 
 .outer-orbit-general {

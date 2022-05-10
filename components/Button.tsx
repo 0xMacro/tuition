@@ -10,8 +10,13 @@ const Button = ({ action, children, ...props }: any) => {
       fontWeight="bold"
       bg="black"
       color="gray.100"
-      borderRadius={30}
-      _hover={{ cursor: "pointer", background: "blue.800", transition: "all 0.2s" }}
+      borderRadius={"100px"}
+      transition="all 0.2s"
+      _hover={{
+        cursor: "pointer",
+        background: "red.100",
+        color: "gray.900",
+      }}
       {...props}
     >
       {children}

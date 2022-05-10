@@ -14,13 +14,13 @@ const ThankYou = ({ itemVariant }: any) => {
       alignItems="center"
       variants={itemVariant}
     >
-      <AiOutlineCheckCircle size={60} color={theme.colors.green[300]} />
+      <AiOutlineCheckCircle size={60} color={theme.colors.green[500]} />
       <Text
-        ml={5}
+        ml={{ base: 0, md: 5 }}
         fontWeight="bold"
         fontSize="2xl"
         textAlign="center"
-        color={theme.colors.gray[100]}
+        color={theme.colors.gray[900]}
       >
         Thank you for your contribution.
       </Text>

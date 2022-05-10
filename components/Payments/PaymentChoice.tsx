@@ -12,7 +12,7 @@ const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
     <Button
       onClick={action}
       display="flex"
-      p={{ base: 3, sm: 4 }}
+      py={{ base: 3, sm: 4 }}
       my={{ base: 3, md: 4 }}
       justifyContent="center"
       fontSize="lg"

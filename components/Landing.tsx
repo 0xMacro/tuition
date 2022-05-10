@@ -11,13 +11,14 @@ const text = {
 
 const Landing = () => {
   return (
-    <Flex pl={7}>
+    <Flex pl={{ base: 0, sm: 7 }}>
       <Flex mt={10} flexDirection="column">
         <MotionBox variants={text} initial="hidden" animate="show">
           <Text
             color="black.100"
             textAlign="left"
             fontWeight="bold"
+            fontFamily={"Gothic"}
             fontSize={{ base: "3xl", md: "5xl" }}
             lineHeight={{ base: "2.8rem", md: "5rem" }}
           >
@@ -34,7 +35,12 @@ const Landing = () => {
         </MotionBox>
         <Payments />
       </Flex>
-      <Flex mt={10} flexDirection="column">
+      <Flex
+        position={"fixed"}
+        left="65%"
+        top={"40%"}
+        display={{ base: "none", lg: "block" }}
+      >
         <Orbit />
       </Flex>
     </Flex>
