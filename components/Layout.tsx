@@ -17,6 +17,7 @@ const Layout = ({ children }: LayoutProps) => {
     <>
       <Particles
         init={particlesInit}
+        // @ts-ignore
         options={bubbles}
       />
       <Navbar />
