@@ -1,6 +1,5 @@
-import { Text, Flex } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import Button from "components/Button";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";
 
 type PaymentChoiceProps = {
@@ -13,7 +12,7 @@ const PaymentChoice = ({ title, action }: PaymentChoiceProps) => {
     <Button
       onClick={action}
       display="flex"
-      p={{ base: 3, sm: 4 }}
+      py={{ base: 3, sm: 4 }}
       my={{ base: 3, md: 4 }}
       justifyContent="center"
       fontSize="lg"

@@ -1,6 +1,5 @@
 import Layout from "components/Layout";
 import { Box } from "@chakra-ui/react";
-import SeaBackground from "components/SeaBackground";
 import Landing from "components/Landing";
 
 const Home = () => {
@@ -11,7 +10,6 @@ const Home = () => {
           <Landing />
         </Box>
       </Layout>
-      <SeaBackground />
     </>
   );
 };

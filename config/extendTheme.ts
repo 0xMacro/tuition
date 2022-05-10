@@ -15,7 +15,7 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "#001226",
+        backgroundImage: "linear-gradient(140deg, rgba(249,249,249,1) 70%, rgba(245,154,190,1) 100%)",
         minHeight: "100vh",
       },
     },
