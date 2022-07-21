@@ -1,10 +1,31 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
+
+
+interface USDC {
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external returns (bool);
+
+    function permit(
+        address owner,
+        address spender,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external;
+}
 
 contract Tuition is Ownable {
     address public TREASURY;
     bool public locked;
+    address public USDCAddress;
     mapping(address => bool) public isStaff;
     mapping(address => bool) public alreadyPaid;
     mapping(address => uint256) public balance;
@@ -12,12 +33,14 @@ contract Tuition is Ownable {
     constructor(
         address newOwner,
         address treasury,
-        address[] memory initialStaff
+        address[] memory initialStaff,
+        address _USDCAddress
     ) {
         for (uint256 i = 0; i < initialStaff.length; i++) {
             isStaff[initialStaff[i]] = true;
         }
         TREASURY = treasury;
+        USDCAddress = _USDCAddress;
         transferOwnership(newOwner);
     }
 
@@ -33,14 +56,21 @@ contract Tuition is Ownable {
     }
 
     /**
-     * Takes a 1 ETH contribution from a student
+     *
+     * Takes user signature and uses the permit() ERC20 function to take a 3000 USDC contribution from a student
      */
-    function contribute() external payable contractNotLocked {
+    function contribute(
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
-        require(msg.value == 1 ether, "WRONG_AMOUNT");
+        
+        USDC(USDCAddress).permit(msg.sender, address(this), 1, deadline, v, r, s);
+        USDC(USDCAddress).transferFrom(msg.sender, address(this), 1);
 
         alreadyPaid[msg.sender] = true;
-        balance[msg.sender] = msg.value;
     }
 
     /**
