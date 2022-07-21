@@ -77,10 +77,10 @@ const Payments = () => {
         ) : (
           <>
             <MotionBox variants={item}>
-              <PaymentChoice
+              {/* <PaymentChoice
                 title="Contribute 1 ETH and Get Started"
                 action={() => handleContribution("1")}
-              />
+              /> */}
             </MotionBox>
           </>
         )}

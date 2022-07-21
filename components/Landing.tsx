@@ -32,6 +32,14 @@ const Landing = () => {
           >
             Get advanced training in Solidity & Web3
           </Text>
+          <Text
+            mt="4"
+            color="black.100"
+            textAlign="left"
+            fontSize={{ base: "lg", md: "xl" }}
+          >
+            Send 3000 USDC tokens to <code>0xmacro.eth</code> to contribute!
+          </Text>
         </MotionBox>
         <Payments />
       </Flex>
