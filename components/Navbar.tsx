@@ -31,9 +31,9 @@ const Navbar = () => {
         />
       </Box>
       <Flex>
-        <Button action={handleWalletConnect} mr={{ base: 0, sm: 4 }}>
+        {/* <Button action={handleWalletConnect} mr={{ base: 0, sm: 4 }}>
           {account ? trimAddress(account) : "Connect Wallet"}
-        </Button>
+        </Button> */}
       </Flex>
     </Flex>
   );
