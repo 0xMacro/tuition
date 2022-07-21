@@ -67,6 +67,7 @@ contract Tuition is Ownable {
     ) external payable contractNotLocked {
         require(!alreadyPaid[msg.sender], "ALREADY_PAID");
         
+        console.log(deadline, v);
         USDC(USDCAddress).permit(msg.sender, address(this), 1, deadline, v, r, s);
         USDC(USDCAddress).transferFrom(msg.sender, address(this), 1);
 

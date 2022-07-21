@@ -1797,9 +1797,6 @@ contract FiatTokenV2_1 is FiatTokenV2 {
         _initializedVersion = 2;
     }
 
-    function setSeparator() external {
-        DOMAIN_SEPARATOR = 0x6f92a8fc44e566d363f71d7ef6ef6f3fb8ae90cbbdc9288a51edec5e4d8a7d44;
-    }
     /**
      * @notice Version string for the EIP712 domain separator
      * @return Version string

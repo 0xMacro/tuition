@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
 import { useContractFunction, useEthers } from "@usedapp/core";
-import { signERC2612Permit } from "eth-permit";
 import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
@@ -46,16 +45,8 @@ const Payments = () => {
           .NEXT_PUBLIC_CONTRACT_ADDRESS as string;
         let usdcAddress = process.env.NEXT_PUBLIC_USDC_ADDRESS as string;
 
-        const result = await signERC2612Permit(
-          library,
-          usdcAddress,
-          account,
-          tuitionAddress,
-          "1"
-        );
+        console.log(usdcAddress, account, tuitionAddress)
 
-        console.log(library);
-        contribute(result.deadline, result.v, result.r, result.s);
       } else {
         setSelectedChoice(amount);
         activateWalletAndHandleError(activateBrowserWallet, toast);

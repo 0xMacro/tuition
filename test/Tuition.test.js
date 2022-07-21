@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const { signERC2612Permit } = require("eth-permit");
 const { BigNumber } = require("ethers");
 const { parseEther } = require("ethers/lib/utils");
 const { ethers } = require("hardhat");
@@ -81,17 +80,6 @@ describe("Tuition contract", function () {
   describe("Payments", () => {
     describe("Contributing", () => {
       it.only("Transfers from msg.sender succesfully", async () => {
-        const result = await signERC2612Permit(
-          addr1,
-          usdc.address,
-          addr1.address,
-          tuition.address,
-          BigNumber.from("1").toString()
-        );
-
-        console.log(addr1.address, tuition.address);
-
-        tuition.contribute(result.deadline, result.v, result.r, result.s);
       });
 
       it("Reverts if not exactly 1 ETH", async () => {
