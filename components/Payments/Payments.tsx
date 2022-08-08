@@ -33,7 +33,7 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  // const [selectedChoice, setSelectedChoice] = useState("");
+  // const [selectedChoice, setSelectedChoice] = useState(""); xx
   const userAlreadyPaid = useUserAlreadyPaid(account);
   const { state: contributionStatus, send: contribute } = useContractFunction(
     tuition,
