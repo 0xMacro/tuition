@@ -1,11 +1,15 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import {
+  // useContractFunction,
+  useEthers,
+  useSendTransaction,
+} from "@usedapp/core";
 import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
-  tuition,
+  // tuition,
   getEthPricePeggedInUsd,
 } from "utils";
 import { toast } from "react-toastify";
@@ -14,6 +18,7 @@ import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
 import { Text } from "@chakra-ui/react";
+import { TREASURY_ADDRESS } from "utils/constants";
 
 const container = {
   hidden: { opacity: 0 },
@@ -35,17 +40,24 @@ const Payments = () => {
   const [isLoading, setIsLoading] = useState(false);
   // const [selectedChoice, setSelectedChoice] = useState(""); xx
   const userAlreadyPaid = useUserAlreadyPaid(account);
-  const { state: contributionStatus, send: contribute } = useContractFunction(
-    tuition,
-    "contribute"
-  );
+  const { state: contributionStatus, sendTransaction } = useSendTransaction();
+  // const { state: contributionStatus, send: contribute } = useContractFunction(
+  //   tuition,
+  //   "contribute"
+  // );
 
   const handleContribution = async () => {
     if (account) {
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
-      console.log("yyyy ethValue", ethValue);
-      contribute({ value: ethValue });
+      // const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 1 });
+      console.log("yyyy10");
+      // contribute({ value: ethValue });
+      sendTransaction({
+        to: TREASURY_ADDRESS,
+        value: ethValue,
+      });
     } else {
+      console.log("yyyy20");
       // setSelectedChoice(amount);
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
