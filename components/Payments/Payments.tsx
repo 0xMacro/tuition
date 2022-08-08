@@ -1,15 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
-import {
-  // useContractFunction,
-  useEthers,
-  useSendTransaction,
-} from "@usedapp/core";
+import { useEthers, useSendTransaction } from "@usedapp/core";
 import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
-  // tuition,
   getEthPricePeggedInUsd,
 } from "utils";
 import { toast } from "react-toastify";
@@ -38,46 +33,20 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  // const [selectedChoice, setSelectedChoice] = useState(""); xx
   const userAlreadyPaid = useUserAlreadyPaid(account);
   const { state: contributionStatus, sendTransaction } = useSendTransaction();
-  // const { state: contributionStatus, send: contribute } = useContractFunction(
-  //   tuition,
-  //   "contribute"
-  // );
 
   const handleContribution = async () => {
     if (account) {
-      // const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 1 });
-      console.log("yyyy10");
-      // contribute({ value: ethValue });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
       sendTransaction({
         to: TREASURY_ADDRESS,
         value: ethValue,
       });
     } else {
-      console.log("yyyy20");
-      // setSelectedChoice(amount);
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
   };
-
-  // useEffect(() => {
-  //   // add
-  //   console.log("testing 3333");
-  //   (async () => {
-  //     console.log("testing 4444");
-  //     const resp = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
-  //     console.log("testing 5555", resp);
-  //     console.log("test 666", { account });
-  //     // Continue the flow in case an user connected when clicking on Pay
-  //     if (account) {
-  //       handleContribution("1");
-  //       // setSelectedChoice("");
-  //     }
-  //   })();
-  // }, [account, handleContribution]);
 
   useEffect(() => {
     handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
@@ -107,6 +76,7 @@ const Payments = () => {
               mt="4"
               color="black.100"
               textAlign="center"
+              fontStyle="italic"
               fontSize={{ base: "lg", md: "xl" }}
             >
               *Tuition is in ETH, pegged to $3,000 USD.

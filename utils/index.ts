@@ -80,8 +80,6 @@ export const getEthPricePeggedInUsd = async (props: { usdAmount: number }) => {
     console.error("There is a Gemini API Issue", JSON.stringify(resp, null, 2));
   }
 
-  console.log("test resp", resp);
-  console.log("test resp.data", resp.data);
   const price = resp?.data[0]?.price;
 
   if (!price || typeof Number(price) !== "number") {
