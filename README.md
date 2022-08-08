@@ -17,3 +17,18 @@ Ended up sticking to a 1 ETH payment so students will always see the same price 
 This dapp will be extended to add a Pay-To-Earn section. 
 
 Here, students will be able to do a precourse to get them up to the level required to apply for our main bootcamp, as well as earn the DAO's ERC20 token in the process.
+
+
+### Getting Started
+Below are steps you need in order to run locally
+
+1. `yarn install`
+2. add `.env` file with the below. It is required in order to compile even if you don't plan on deploying to rinkeby (these envs are needed for `hardhat.config.js` and `utils/index.ts`).
+```
+ETHERSCAN_API_KEY=...
+ALCHEMY_KEY=...
+PRIVATE_KEY=...
+NEXT_PUBLIC_CONTRACT_ADDRESS=...
+```
+3. `yarn hardhat compile` => to compile `artifacts` folder
+4. `yarn run dev`

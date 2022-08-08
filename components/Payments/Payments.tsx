@@ -6,12 +6,14 @@ import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
   tuition,
+  getEthPricePeggedInUsd,
 } from "utils";
 import { toast } from "react-toastify";
 import { parseEther } from "ethers/lib/utils";
 import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
+import { Text } from "@chakra-ui/react";
 
 const container = {
   hidden: { opacity: 0 },
@@ -31,32 +33,39 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedChoice, setSelectedChoice] = useState("");
+  // const [selectedChoice, setSelectedChoice] = useState("");
   const userAlreadyPaid = useUserAlreadyPaid(account);
   const { state: contributionStatus, send: contribute } = useContractFunction(
     tuition,
     "contribute"
   );
 
-  const handleContribution = useCallback(
-    (amount: "1") => {
-      if (account) {
-        contribute({ value: parseEther(amount) });
-      } else {
-        setSelectedChoice(amount);
-        activateWalletAndHandleError(activateBrowserWallet, toast);
-      }
-    },
-    [account, contribute, setSelectedChoice, activateBrowserWallet]
-  );
-
-  useEffect(() => {
-    // Continue the flow in case an user connected when clicking on Pay
-    if (selectedChoice && account) {
-      handleContribution(selectedChoice as "1");
-      setSelectedChoice("");
+  const handleContribution = async () => {
+    if (account) {
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      console.log("yyyy ethValue", ethValue);
+      contribute({ value: ethValue });
+    } else {
+      // setSelectedChoice(amount);
+      activateWalletAndHandleError(activateBrowserWallet, toast);
     }
-  }, [account, handleContribution, selectedChoice]);
+  };
+
+  // useEffect(() => {
+  //   // add
+  //   console.log("testing 3333");
+  //   (async () => {
+  //     console.log("testing 4444");
+  //     const resp = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+  //     console.log("testing 5555", resp);
+  //     console.log("test 666", { account });
+  //     // Continue the flow in case an user connected when clicking on Pay
+  //     if (account) {
+  //       handleContribution("1");
+  //       // setSelectedChoice("");
+  //     }
+  //   })();
+  // }, [account, handleContribution]);
 
   useEffect(() => {
     handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
@@ -78,10 +87,20 @@ const Payments = () => {
           <>
             <MotionBox variants={item}>
               <PaymentChoice
-                title="Contribute 1 ETH and Get Started"
+                title="Contribute ETH and Get Started *"
                 action={() => handleContribution("1")}
               />
             </MotionBox>
+            <Text
+              mt="4"
+              color="black.100"
+              textAlign="center"
+              fontSize={{ base: "lg", md: "xl" }}
+            >
+              *Tuition is in ETH, pegged to $3,000 USD.
+              <br />
+              We calculate exchange rate at time of transaction.
+            </Text>
           </>
         )}
       </Loading>
