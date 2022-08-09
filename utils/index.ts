@@ -1,6 +1,14 @@
 import axios from "axios";
 import { Contract } from "ethers";
 import { parseEther } from "ethers/lib/utils";
+import { USDC_ERC20_ADDRESS, USDC_TRANSFER_ABI } from "./constants";
+
+export const UsdcObject = {
+  abi: USDC_TRANSFER_ABI,
+  address: USDC_ERC20_ADDRESS,
+};
+
+export const usdcContract = new Contract(UsdcObject.address, UsdcObject.abi);
 
 export const getErrorFromReversion = (revertReason: string) => {
   const revertErrors = [

@@ -1,17 +1,23 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { parseUnits } from "ethers/lib/utils";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
-import { useEthers, useSendTransaction } from "@usedapp/core";
+import {
+  useContractFunction,
+  useEthers,
+  useSendTransaction,
+} from "@usedapp/core";
 import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
   getEthPricePeggedInUsd,
+  usdcContract,
 } from "utils";
 import { toast } from "react-toastify";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
-import { Text } from "@chakra-ui/react";
-import { TREASURY_ADDRESS } from "utils/constants";
+import { Flex, Text } from "@chakra-ui/react";
+import { TREASURY_ADDRESS, USDC_DECIMALS } from "utils/constants";
 
 const container = {
   hidden: { opacity: 0 },
@@ -33,13 +39,35 @@ const Payments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { state: contributionStatus, sendTransaction } = useSendTransaction();
 
-  const handleContribution = async () => {
+  console.log("contributionStatus yyy", contributionStatus);
+
+  const { state: contributionStatus2, send: sendUsdc } = useContractFunction(
+    usdcContract,
+    "transfer"
+  );
+
+  const handleEthContribution = async () => {
     if (account) {
       const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
       sendTransaction({
         to: TREASURY_ADDRESS,
         value: ethValue,
       });
+    } else {
+      activateWalletAndHandleError(activateBrowserWallet, toast);
+    }
+  };
+
+  const handleUsdcContribution = async () => {
+    if (account) {
+      console.log("yyy 10 are we hitting this");
+      // usdc has 6 decimals, not 18 like eth
+      sendUsdc({
+        to: TREASURY_ADDRESS,
+        value: parseUnits("3000", USDC_DECIMALS),
+      });
+
+      console.log("yyy 12 are we hitting this");
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
@@ -52,8 +80,7 @@ const Payments = () => {
   return (
     <MotionFlex
       mt={7}
-      w={{ base: "100%", sm: "90%", md: "64%", lg: "50%", xl: "50%" }}
-      flexDirection="column"
+      w={{ base: "100%" }}
       variants={container}
       initial="hidden"
       animate="show"
@@ -63,24 +90,46 @@ const Payments = () => {
           <ThankYou itemVariant={item} />
         ) : (
           <>
-            <MotionBox variants={item}>
-              <PaymentChoice
-                title="Contribute ETH and Get Started *"
-                action={() => handleContribution()}
-              />
-            </MotionBox>
+            <Flex
+              justifyContent="flex-start"
+              flexDirection={{
+                base: "column",
+                md: "row",
+              }}
+              // minWidth={{ base: "100%" }}
+              w={{ base: "100%" }}
+            >
+              <MotionBox
+                variants={item}
+                marginRight={{ base: "0px", md: "20px" }}
+              >
+                <PaymentChoice
+                  title="Contribute ETH *"
+                  action={() => handleEthContribution()}
+                />
+              </MotionBox>
+              <MotionBox
+                variants={item}
+                marginRight={{ base: "0px", md: "20px" }}
+              >
+                <PaymentChoice
+                  title="Contribute 3,000 USDC"
+                  action={() => handleUsdcContribution()}
+                />
+              </MotionBox>
+            </Flex>
             <Text
               mt="4"
               color="black.100"
-              textAlign="center"
+              textAlign="left"
               fontStyle="italic"
               fontSize={{ base: "lg", md: "xl" }}
             >
-              *Tuition is in ETH, pegged to $3,000 USD.
+              *If Tuition is paid in ETH, it will be equivalent to $3,000 USD.
               <br />
               We calculate exchange rate at time of transaction.
               <br />
-              Actual pegging may vary by a few basis points.
+              Actual rate may vary by a few basis points.
             </Text>
           </>
         )}
