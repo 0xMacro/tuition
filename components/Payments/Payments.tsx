@@ -35,7 +35,7 @@ const Payments = () => {
 
   const handleContribution = async () => {
     if (account) {
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 1 });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
       sendTransaction({
         to: TREASURY_ADDRESS,
         value: ethValue,
