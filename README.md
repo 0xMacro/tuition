@@ -23,16 +23,8 @@ Here, students will be able to do a precourse to get them up to the level requir
 Below are steps you need in order to run locally
 
 1. `yarn install`
-2. add `.env` file with the below. It is required in order to compile even if you don't plan on deploying to rinkeby (these envs are needed for `hardhat.config.js` and `utils/index.ts`).
-
-```
-ETHERSCAN_API_KEY=...
-ALCHEMY_KEY=...
-PRIVATE_KEY=...
-```
-
-3. `yarn run dev`
+2. `yarn run dev`
 
 ### Things to Keep in Mind:
 
-- I deleted some of the ts/js utils related to contract since we are not using tuition contract and don't have to `yarn hardhat compile` in order to run app locally
+- I deleted some of the ts/js utils related to contract since we are not using tuition contract and don't have to `yarn hardhat compile` in order to run app locally. if you want to add contract back in the front-end, you need to add `.env` variables and execute `yarn hardhat compile` to compile abi, etc.
