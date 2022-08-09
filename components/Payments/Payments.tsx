@@ -38,7 +38,7 @@ const Payments = () => {
 
   const handleContribution = async () => {
     if (account) {
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 1 });
       sendTransaction({
         to: TREASURY_ADDRESS,
         value: ethValue,
@@ -82,6 +82,8 @@ const Payments = () => {
               *Tuition is in ETH, pegged to $3,000 USD.
               <br />
               We calculate exchange rate at time of transaction.
+              <br />
+              Actual pegging may vary by a few basis points.
             </Text>
           </>
         )}
