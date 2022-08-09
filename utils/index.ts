@@ -1,14 +1,6 @@
-import Tuition from "artifacts/contracts/Tuition.sol/Tuition.json";
 import axios from "axios";
 import { Contract } from "ethers";
 import { parseEther } from "ethers/lib/utils";
-
-export const TuitionObject = {
-  abi: Tuition.abi,
-  address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as string,
-};
-
-export const tuition = new Contract(TuitionObject.address, TuitionObject.abi);
 
 export const getErrorFromReversion = (revertReason: string) => {
   const revertErrors = [

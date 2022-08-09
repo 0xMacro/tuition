@@ -8,8 +8,6 @@ import {
   getEthPricePeggedInUsd,
 } from "utils";
 import { toast } from "react-toastify";
-import { parseEther } from "ethers/lib/utils";
-import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
 import { Text } from "@chakra-ui/react";
@@ -33,7 +31,6 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  const userAlreadyPaid = useUserAlreadyPaid(account);
   const { state: contributionStatus, sendTransaction } = useSendTransaction();
 
   const handleContribution = async () => {
@@ -62,7 +59,7 @@ const Payments = () => {
       animate="show"
     >
       <Loading isLoading={isLoading}>
-        {account && userAlreadyPaid ? (
+        {account && contributionStatus?.status === "Success" ? (
           <ThankYou itemVariant={item} />
         ) : (
           <>
