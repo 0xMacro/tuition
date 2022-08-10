@@ -98,7 +98,7 @@ export const getEthPricePeggedInUsd = async (props: { usdAmount: number }) => {
 
   if (!price || typeof Number(price) !== "number") {
     window.alert(
-      "Cannot retrive ETH price from Gemini API. Please contact admin."
+      "Cannot retrieve ETH price from Gemini API. Please contact admin."
     );
     return;
   }
