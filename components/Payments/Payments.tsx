@@ -37,20 +37,20 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  const { state: contributionStatus2, sendTransaction } = useSendTransaction();
+  const { state: ethTransactionState, sendTransaction } = useSendTransaction();
 
   // console.log("contributionStatus2 sendTransaction yyy", contributionStatus2);
 
-  const { state: contributionStatus, send: sendUsdc } = useContractFunction(
+  const { state: usdcTransactionState, send: sendUsdc } = useContractFunction(
     usdcContract,
     "transfer"
   );
 
-  console.log("contributionStatus sendUsdc yyy", contributionStatus2);
+  console.log("contributionStatus sendUsdc yyy", usdcTransactionState);
 
   const handleEthContribution = async () => {
     if (account) {
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 1 }); // 3_000
       sendTransaction({
         to: TREASURY_ADDRESS,
         value: ethValue,
@@ -84,8 +84,21 @@ const Payments = () => {
   };
 
   useEffect(() => {
-    handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
-  }, [contributionStatus]);
+    handleContractInteractionResponse(ethTransactionState, toast, setIsLoading);
+  }, [ethTransactionState]);
+
+  useEffect(() => {
+    handleContractInteractionResponse(
+      usdcTransactionState,
+      toast,
+      setIsLoading
+    );
+  }, [usdcTransactionState]);
+
+  const isSuccessState =
+    account &&
+    (ethTransactionState?.status === "Success" ||
+      usdcTransactionState?.status === "Success");
 
   return (
     <MotionFlex
@@ -96,7 +109,7 @@ const Payments = () => {
       animate="show"
     >
       <Loading isLoading={isLoading}>
-        {account && contributionStatus?.status === "Success" ? (
+        {isSuccessState ? (
           <ThankYou itemVariant={item} />
         ) : (
           <>
