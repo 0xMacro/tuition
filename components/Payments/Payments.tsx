@@ -1,17 +1,24 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { parseUnits } from "ethers/lib/utils";
 import { MotionBox, MotionFlex } from "components/MotionComponents";
 import PaymentChoice from "./PaymentChoice";
-import { useContractFunction, useEthers } from "@usedapp/core";
+import {
+  useContractFunction,
+  useEthers,
+  useSendTransaction,
+} from "@usedapp/core";
 import {
   activateWalletAndHandleError,
   handleContractInteractionResponse,
-  tuition,
+  getEthPricePeggedInUsd,
+  usdcContract,
+  handleChainIdError,
 } from "utils";
 import { toast } from "react-toastify";
-import { parseEther } from "ethers/lib/utils";
-import { useUserAlreadyPaid } from "hooks/useUserAlreadyPaid";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
+import { Flex, Text } from "@chakra-ui/react";
+import { ETH_CHAIN_ID, TREASURY_ADDRESS, USDC_DECIMALS } from "utils/constants";
 
 const container = {
   hidden: { opacity: 0 },
@@ -29,59 +36,111 @@ const item = {
 };
 
 const Payments = () => {
-  const { account, activateBrowserWallet } = useEthers();
+  const { account, activateBrowserWallet, chainId } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedChoice, setSelectedChoice] = useState("");
-  const userAlreadyPaid = useUserAlreadyPaid(account);
-  const { state: contributionStatus, send: contribute } = useContractFunction(
-    tuition,
-    "contribute"
+  const { state: ethTransactionState, sendTransaction } = useSendTransaction();
+
+  const { state: usdcTransactionState, send: sendUsdc } = useContractFunction(
+    usdcContract,
+    "transfer"
   );
 
-  const handleContribution = useCallback(
-    (amount: "1") => {
-      if (account) {
-        contribute({ value: parseEther(amount) });
-      } else {
-        setSelectedChoice(amount);
-        activateWalletAndHandleError(activateBrowserWallet, toast);
+  const handleEthContribution = async () => {
+    if (chainId !== ETH_CHAIN_ID) {
+      handleChainIdError(toast);
+    } else if (account) {
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      if (ethValue) {
+        sendTransaction({
+          to: TREASURY_ADDRESS,
+          value: ethValue,
+        });
       }
-    },
-    [account, contribute, setSelectedChoice, activateBrowserWallet]
-  );
-
-  useEffect(() => {
-    // Continue the flow in case an user connected when clicking on Pay
-    if (selectedChoice && account) {
-      handleContribution(selectedChoice as "1");
-      setSelectedChoice("");
+    } else {
+      activateWalletAndHandleError(activateBrowserWallet, toast);
     }
-  }, [account, handleContribution, selectedChoice]);
+  };
+
+  const handleUsdcContribution = async () => {
+    if (chainId !== ETH_CHAIN_ID) {
+      handleChainIdError(toast);
+    } else if (account) {
+      sendUsdc(TREASURY_ADDRESS, parseUnits("3000", USDC_DECIMALS));
+    } else {
+      activateWalletAndHandleError(activateBrowserWallet, toast);
+    }
+  };
 
   useEffect(() => {
-    handleContractInteractionResponse(contributionStatus, toast, setIsLoading);
-  }, [contributionStatus]);
+    handleContractInteractionResponse(ethTransactionState, toast, setIsLoading);
+  }, [ethTransactionState]);
+
+  useEffect(() => {
+    handleContractInteractionResponse(
+      usdcTransactionState,
+      toast,
+      setIsLoading
+    );
+  }, [usdcTransactionState]);
+
+  const isSuccessState =
+    account &&
+    (ethTransactionState?.status === "Success" ||
+      usdcTransactionState?.status === "Success");
 
   return (
     <MotionFlex
       mt={7}
-      w={{ base: "100%", sm: "90%", md: "64%", lg: "50%", xl: "50%" }}
-      flexDirection="column"
+      w={{ base: "100%" }}
       variants={container}
       initial="hidden"
       animate="show"
     >
       <Loading isLoading={isLoading}>
-        {account && userAlreadyPaid ? (
+        {isSuccessState ? (
           <ThankYou itemVariant={item} />
         ) : (
           <>
-            <MotionBox variants={item}>
-              <PaymentChoice
-                title="Contribute 1 ETH and Get Started"
-                action={() => handleContribution("1")}
-              />
-            </MotionBox>
+            <Flex
+              justifyContent="flex-start"
+              flexDirection={{
+                base: "column",
+                md: "row",
+              }}
+              w={{ base: "100%" }}
+            >
+              <MotionBox
+                variants={item}
+                marginRight={{ base: "0px", md: "20px" }}
+              >
+                <PaymentChoice
+                  title="Contribute ETH *"
+                  action={() => handleEthContribution()}
+                />
+              </MotionBox>
+              <MotionBox
+                variants={item}
+                marginRight={{ base: "0px", md: "20px" }}
+              >
+                <PaymentChoice
+                  title="Contribute 3,000 USDC"
+                  action={() => handleUsdcContribution()}
+                />
+              </MotionBox>
+            </Flex>
+            <Text
+              mt="4"
+              color="black.100"
+              textAlign="left"
+              fontStyle="italic"
+              fontSize={{ base: "lg", md: "xl" }}
+            >
+              *If Tuition is paid in ETH, it will be equivalent to $3,000 USD.
+              <br />
+              We calculate exchange rate at time of transaction.
+              <br />
+              Actual rate may vary by a few basis points.
+            </Text>
           </>
         )}
       </Loading>
