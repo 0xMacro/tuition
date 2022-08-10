@@ -49,6 +49,10 @@ export const activateWalletAndHandleError = (activate: any, toast: any) => {
   });
 };
 
+export const handleChainIdError = (toast: any) => {
+  return toast.error("Please switch to Ethereum Mainnet before contributing!");
+};
+
 export const handleContractInteractionResponse = async (
   state: any,
   toast: any,

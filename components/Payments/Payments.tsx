@@ -12,12 +12,13 @@ import {
   handleContractInteractionResponse,
   getEthPricePeggedInUsd,
   usdcContract,
+  handleChainIdError,
 } from "utils";
 import { toast } from "react-toastify";
 import Loading from "components/Loading";
 import ThankYou from "./ThankYou";
 import { Flex, Text } from "@chakra-ui/react";
-import { TREASURY_ADDRESS, USDC_DECIMALS } from "utils/constants";
+import { ETH_CHAIN_ID, TREASURY_ADDRESS, USDC_DECIMALS } from "utils/constants";
 
 const container = {
   hidden: { opacity: 0 },
@@ -35,7 +36,7 @@ const item = {
 };
 
 const Payments = () => {
-  const { account, activateBrowserWallet } = useEthers();
+  const { account, activateBrowserWallet, chainId } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
   const { state: ethTransactionState, sendTransaction } = useSendTransaction();
 
@@ -45,7 +46,9 @@ const Payments = () => {
   );
 
   const handleEthContribution = async () => {
-    if (account) {
+    if (chainId !== ETH_CHAIN_ID) {
+      handleChainIdError(toast);
+    } else if (account) {
       const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
       if (ethValue) {
         sendTransaction({
@@ -59,7 +62,9 @@ const Payments = () => {
   };
 
   const handleUsdcContribution = async () => {
-    if (account) {
+    if (chainId !== ETH_CHAIN_ID) {
+      handleChainIdError(toast);
+    } else if (account) {
       sendUsdc(TREASURY_ADDRESS, parseUnits("3000", USDC_DECIMALS));
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
