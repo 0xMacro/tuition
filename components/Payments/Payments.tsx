@@ -37,14 +37,16 @@ const item = {
 const Payments = () => {
   const { account, activateBrowserWallet } = useEthers();
   const [isLoading, setIsLoading] = useState(false);
-  const { state: contributionStatus, sendTransaction } = useSendTransaction();
+  const { state: contributionStatus2, sendTransaction } = useSendTransaction();
 
-  console.log("contributionStatus yyy", contributionStatus);
+  // console.log("contributionStatus2 sendTransaction yyy", contributionStatus2);
 
-  const { state: contributionStatus2, send: sendUsdc } = useContractFunction(
+  const { state: contributionStatus, send: sendUsdc } = useContractFunction(
     usdcContract,
     "transfer"
   );
+
+  console.log("contributionStatus sendUsdc yyy", contributionStatus2);
 
   const handleEthContribution = async () => {
     if (account) {
@@ -60,14 +62,22 @@ const Payments = () => {
 
   const handleUsdcContribution = async () => {
     if (account) {
-      console.log("yyy 10 are we hitting this");
       // usdc has 6 decimals, not 18 like eth
-      sendUsdc({
-        to: TREASURY_ADDRESS,
-        value: parseUnits("3000", USDC_DECIMALS),
-      });
+      // sendUsdc({
+      //   to: TREASURY_ADDRESS,
+      //   value: parseUnits("3000", USDC_DECIMALS),
+      // });
 
-      console.log("yyy 12 are we hitting this");
+      console.log("usdcContract contract", usdcContract);
+      const val = parseUnits("0.1", USDC_DECIMALS);
+      console.log("yyy 10 are we hitting this", { val });
+
+      const resp = await sendUsdc(
+        TREASURY_ADDRESS,
+        parseUnits("0.1", USDC_DECIMALS)
+      );
+
+      console.log("yyy 12 are we hitting this", resp);
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }

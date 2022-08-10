@@ -11,6 +11,7 @@ export const UsdcObject = {
 export const usdcContract = new Contract(UsdcObject.address, UsdcObject.abi);
 
 export const getErrorFromReversion = (revertReason: string) => {
+  console.log("yyy revertReason", revertReason);
   const revertErrors = [
     "ALREADY_PAID",
     "NOT_TAKING_PAYMENTS",
@@ -26,6 +27,7 @@ export const getErrorFromReversion = (revertReason: string) => {
 };
 
 const mapErrorToFriendlyMessage = (error: string | undefined) => {
+  console.log("error yyy", error);
   switch (error) {
     case "ALREADY_PAID":
       return "You already contributed!";
