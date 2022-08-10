@@ -58,7 +58,7 @@ const Payments = () => {
 
   const handleUsdcContribution = async () => {
     if (account) {
-      sendUsdc(TREASURY_ADDRESS, parseUnits("0.1", USDC_DECIMALS));
+      sendUsdc(TREASURY_ADDRESS, parseUnits("3000", USDC_DECIMALS));
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
@@ -100,7 +100,6 @@ const Payments = () => {
                 base: "column",
                 md: "row",
               }}
-              // minWidth={{ base: "100%" }}
               w={{ base: "100%" }}
             >
               <MotionBox
