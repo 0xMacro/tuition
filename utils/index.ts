@@ -16,6 +16,7 @@ export const getErrorFromReversion = (revertReason: string) => {
     "NOT_TAKING_PAYMENTS",
     "User denied transaction",
     "insufficient funds",
+    "ERC20: transfer amount exceeds balance",
   ];
 
   const error = revertErrors.find((errorConstant) =>
@@ -35,6 +36,8 @@ const mapErrorToFriendlyMessage = (error: string | undefined) => {
       return "Transaction denied by user!";
     case "insufficient funds":
       return "Insufficient funds!";
+    case "ERC20: transfer amount exceeds balance":
+      return "You do not have enough USDC to complete this transaction";
     default:
       return "An error occured calling this method!";
   }
@@ -77,15 +80,23 @@ export const getEthPricePeggedInUsd = async (props: { usdAmount: number }) => {
   const resp = await axios.get("https://api.gemini.com/v1/pricefeed/ethusd");
 
   if (resp.status !== 200) {
-    console.error("There is a Gemini API Issue", JSON.stringify(resp, null, 2));
+    window.alert(
+      `There is a Gemini API Issue. Please contact admin.\n Details: ${JSON.stringify(
+        resp,
+        null,
+        2
+      )}`
+    );
+    return;
   }
 
   const price = resp?.data[0]?.price;
 
   if (!price || typeof Number(price) !== "number") {
-    throw new Error(
+    window.alert(
       "Cannot retrive ETH price from Gemini API. Please contact admin."
     );
+    return;
   }
 
   // calculating amount & rounding to 3rd decimal

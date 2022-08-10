@@ -47,10 +47,12 @@ const Payments = () => {
   const handleEthContribution = async () => {
     if (account) {
       const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
-      sendTransaction({
-        to: TREASURY_ADDRESS,
-        value: ethValue,
-      });
+      if (ethValue) {
+        sendTransaction({
+          to: TREASURY_ADDRESS,
+          value: ethValue,
+        });
+      }
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
