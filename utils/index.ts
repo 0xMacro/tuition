@@ -103,8 +103,8 @@ export const getEthPricePeggedInUsd = async (props: { usdAmount: number }) => {
     return;
   }
 
-  // calculating amount & rounding to 3rd decimal
-  const ethAmount = (usdAmount / Number(price)).toFixed(3);
+  // calculating amount & rounding to 5th decimal
+  const ethAmount = String(usdAmount / Number(price));
 
   // converting response to big number to be used by metamask
   return parseEther(ethAmount);
