@@ -4,7 +4,7 @@ Live on [tuition.0xmacro.com](https://tuition.0xmacro.com)!
 
 ## Functionality
 
-This dapp allows Macro's students to deposit their $3,000 USD payment in denominations of ETH or USDC to the DAO's treasury.
+This dapp allows Macro's students to deposit their $5,000 USD payment in denominations of ETH or USDC to the DAO's treasury.
 
 ## Pricing display
 
