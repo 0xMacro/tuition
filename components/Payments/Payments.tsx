@@ -65,7 +65,7 @@ const Payments = () => {
     if (chainId !== ETH_CHAIN_ID) {
       handleChainIdError(toast);
     } else if (account) {
-      sendUsdc(TREASURY_ADDRESS, parseUnits("3000", USDC_DECIMALS));
+      sendUsdc(TREASURY_ADDRESS, parseUnits("5000", USDC_DECIMALS));
     } else {
       activateWalletAndHandleError(activateBrowserWallet, toast);
     }
@@ -123,7 +123,7 @@ const Payments = () => {
                 marginRight={{ base: "0px", md: "20px" }}
               >
                 <PaymentChoice
-                  title="Contribute 3,000 USDC"
+                  title="Contribute 5,000 USDC"
                   action={() => handleUsdcContribution()}
                 />
               </MotionBox>
@@ -135,7 +135,7 @@ const Payments = () => {
               fontStyle="italic"
               fontSize={{ base: "lg", md: "xl" }}
             >
-              *If Tuition is paid in ETH, it will be equivalent to $3,000 USD.
+              *If Tuition is paid in ETH, it will be equivalent to $5,000 USD.
               <br />
               We calculate exchange rate at time of transaction.
               <br />
