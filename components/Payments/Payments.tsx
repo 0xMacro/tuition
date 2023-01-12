@@ -49,7 +49,7 @@ const Payments = () => {
     if (chainId !== ETH_CHAIN_ID) {
       handleChainIdError(toast);
     } else if (account) {
-      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 3_000 });
+      const ethValue = await getEthPricePeggedInUsd({ usdAmount: 5_000 });
       if (ethValue) {
         sendTransaction({
           to: TREASURY_ADDRESS,
